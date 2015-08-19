@@ -1,5 +1,6 @@
 class Bar:
 
+
     def __init__(self, datetime, op, lo, hi, cl, vl):
         self.datetime = datetime
         self.open = op
