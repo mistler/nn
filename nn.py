@@ -34,7 +34,7 @@ def train(nn, data, N, predictionLength, iterations, validationSize):
             sample, mainValue, averageBar = data.contiguousArray(i, i + N)
             output1 = data.normalizedMin(i + N + 1, i + N + predictionLength + 1, mainValue)
             output2 = data.normalizedMax(i + N + 1, i + N + predictionLength + 1, mainValue)
-            dataSet.addSample(sample, [output1, output2])
+            dataSet.addSample(sample, (output1, output2))
         print "iteration: ", n, " start: ", start, " end: ", end
         trainer = BackpropTrainer(nn, dataSet)
         trainer.train()
