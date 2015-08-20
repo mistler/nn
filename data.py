@@ -29,7 +29,7 @@ class Data:
         array = []
         subArray = self.data[start: end]
         mainValue = (subArray[0].high + subArray[0].low) / 2.
-        for i in range(start, end):
+        for i in range(start - end):
             tmp = subArray[i]
             array.append((tmp.low - mainValue) / self.averageBarSize)
             array.append((tmp.open - mainValue) / self.averageBarSize)
