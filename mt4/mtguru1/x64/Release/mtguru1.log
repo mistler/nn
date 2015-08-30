@@ -1,0 +1,20 @@
+﻿Build started 8/29/2015 17:40:16.
+     1>Project "C:\Users\Mikhail\Desktop\mt4\mtguru1\mtguru1.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /IC:\Python27\include /Zi /nologo /W3 /WX- /O2 /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D MTGURU1_EXPORTS /D _VC80_UPGRADE=0x0600 /D _WINDLL /D _MBCS /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yc"stdafx.h" /Fp".\Release\mtguru1.pch" /Fo".\Release\\" /Fd".\Release\vc140.pdb" /FR"x64\Release\\" /Gd /TP /errorReport:prompt StdAfx.cpp
+         StdAfx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /IC:\Python27\include /Zi /nologo /W3 /WX- /O2 /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D MTGURU1_EXPORTS /D _VC80_UPGRADE=0x0600 /D _WINDLL /D _MBCS /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp".\Release\mtguru1.pch" /Fo".\Release\\" /Fd".\Release\vc140.pdb" /FR"x64\Release\\" /Gd /TP /errorReport:prompt mtguru1.cpp
+         mtguru1.cpp
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(1189,5): warning MSB8012: TargetPath(C:\Users\Mikhail\Desktop\mt4\mtguru1\x64\Release\mtguru1.dll) does not match the Linker's OutputFile property value (C:\Users\Mikhail\Desktop\mt4\mtguru1.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"../mtguru1.dll" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\Python27\libs odbc32.lib odbccp32.lib libpython27.a python27.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /DEF:".\mtguru1.def" /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Mikhail\Desktop\mt4\mtguru1\x64\Release\mtguru1.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\Release\mtguru1.lib" /MACHINE:X64 /DLL .\Release\mtguru1.obj
+         .\Release\StdAfx.obj
+            Creating library .\Release\mtguru1.lib and object .\Release\mtguru1.exp
+         mtguru1.vcxproj -> C:\Users\Mikhail\Desktop\mt4\mtguru1\x64\Release\mtguru1.dll
+       BscMake:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\bscmake.exe /nologo /o".\Release\mtguru1.bsc" x64\Release\mtguru1.sbr x64\Release\StdAfx.sbr
+     1>Done Building Project "C:\Users\Mikhail\Desktop\mt4\mtguru1\mtguru1.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.88
