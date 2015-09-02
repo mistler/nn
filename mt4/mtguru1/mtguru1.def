@@ -3,3 +3,4 @@ LIBRARY mtguru1
 EXPORTS
 __checkLibrary
 __predict
+__loadNN

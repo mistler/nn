@@ -37,6 +37,6 @@ print "saving nn..."
 name = ''
 for s in sys.argv[1:]:
     name += s
-name = name[:-1] + '.pkl'
+name += '.pkl'
 saveNN(nn, name)
 

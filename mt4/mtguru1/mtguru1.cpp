@@ -10,7 +10,15 @@ MT4_EXPFUNC double __stdcall __checkLibrary(){
 	return 1.14;
 }
 
-MT4_EXPFUNC void __stdcall __predict(void* nn, double* data, double* result, const int dataSize, const int inputSize){
+MT4_EXPFUNC void __stdcall __predict(double* data, double* result, const int dataSize, const int inputSize){
 	Py_Initialize();
+
+	Py_Finalize();
+}
+
+MT4_EXPFUNC void __stdcall __loadNN(const char* filename){
+	FILE* exp_file = fopen(filename, "r");
+	Py_Initialize();
+	PyRun_SimpleFile(exp_file, NULL);
 	Py_Finalize();
 }
