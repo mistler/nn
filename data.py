@@ -38,10 +38,10 @@ class Data:
             array.append(tmp.volume / self.averageVolume)
         return array, mainValue, self.averageBarSize
 
-    def averageBarSize(self):
+    def getAverageBarSize(self):
         return self.averageBarSize
 
-    def averageVolume(self):
+    def getAverageVolume(self):
         return self.averageVolume
 
     def normalizedMin(self, start, end, average):

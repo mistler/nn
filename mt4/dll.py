@@ -1,14 +1,14 @@
 from nn import getNN
 from data import Data
 
-nnFilename = "-n5-dEURUSD.hst-12.pkl"
+nnFilename = "-n5-dEURUSD.hst-l2.pkl"
 dataFilename = "EURUSD.hst"
 
 nn = getNN(True, nnFilename)
 data = Data(dataFilename)
 
-averageVolume = data.averageVolume()
-averageBarSize = data.averageBarSize();
+averageVolume = data.getAverageVolume()
+averageBarSize = data.getAverageBarSize();
 
 def normalizeData(self, sample):
 	mainValue = (sample[3] + sample[0]) / 2.
