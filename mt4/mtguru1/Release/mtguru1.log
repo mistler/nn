@@ -1,9 +1,10 @@
-﻿Build started 9/2/2015 23:42:10.
+﻿Build started 9/3/2015 23:41:00.
      1>Project "D:\prog\mql4\nn\mt4\mtguru1\mtguru1.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /IC:\Python27\include /Zi /nologo /W3 /WX- /O2 /Oy- /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D MTGURU1_EXPORTS /D _VC80_UPGRADE=0x0600 /D _WINDLL /D _MBCS /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp".\Release\mtguru1.pch" /Fo".\Release\\" /Fd".\Release\vc140.pdb" /FR".\Release\\" /Gd /TP /analyze- /errorReport:prompt mtguru1.cpp
          mtguru1.cpp
-     1>mtguru1.cpp(20): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+     1>mtguru1.cpp(26): warning C4018: '<': signed/unsigned mismatch
+     1>mtguru1.cpp(33): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
          C:\Program Files (x86)\Windows Kits\10\Include\10.0.10150.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(1189,5): warning MSB8012: TargetPath(D:\prog\mql4\nn\mt4\mtguru1\.\Release\mtguru1.dll) does not match the Linker's OutputFile property value (D:\prog\mql4\nn\mt4\mtguru1.dll). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
        Link:
@@ -17,4 +18,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.01
+Time Elapsed 00:00:02.12

@@ -30,12 +30,14 @@
 
 double __checkLibrary();
 void __loadNN(char& array[]);
+void __predict(double& data[], double& result[], const int inputSize);
 
 #import
 
 
 
-extern string NN_LOADER_FILENAME = "loadNN.py";
+extern string NN_LOADER_FILENAME = "dll.py";
+#define NN_INPUT_SIZE 5
 
 //--- indicator buffers
 double         lowBuffer[];
@@ -80,9 +82,22 @@ int OnCalculate(const int rates_total,
    int Counted_bars;
    Counted_bars=IndicatorCounted();
    i=Bars-Counted_bars-1;
-   while(i>=0){
-      lowBuffer[i]=__checkLibrary();
-      highBuffer[i]=Low[i];
+   if(i > Bars - NN_INPUT_SIZE - 1){
+      i = Bars - NN_INPUT_SIZE - 1;
+   }
+   double result[2];
+   double data[NN_INPUT_SIZE * 5];
+   while(i >= 0){
+      for(int k = i; k < i + NN_INPUT_SIZE; k++){
+         data[(k - i) * 5 + 0] = Low[k];
+         data[(k - i) * 5 + 1] = Open[k];
+         data[(k - i) * 5 + 2] = Close[k];
+         data[(k - i) * 5 + 3] = High[k];
+         data[(k - i) * 5 + 4] = Volume[k];
+      }
+      __predict(data, result, NN_INPUT_SIZE * 5);
+      lowBuffer[i] = result[0];
+      highBuffer[i] = result[1];
       i--;
    }
    return(rates_total);

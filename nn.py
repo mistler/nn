@@ -1,4 +1,7 @@
-import cPickle as pickle
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 from data import Data
 
 from pybrain.tools.shortcuts import buildNetwork
