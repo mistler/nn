@@ -90,7 +90,7 @@ class Data:
 
     def appendBar(self, datetime, lo, op, cl, hi, vl):
         bar = Bar(datetime, lo, op, cl, hi, vl)
-        if self.data[len(data) - 1].datetime == datetime:
+        if self.data[len(self.data) - 1].datetime == datetime:
             self.data.pop()
         self.data.append(bar)
 
