@@ -79,11 +79,13 @@ class Data:
         with open(self.filename, 'rb') as f:
             header = f.read(148)
             while 1:
-                first = f.read(44)
+                first = f.read(4)
                 if not first:
                     break
-                tmp = struct.unpack('Iddddq', first)
-                bar = Bar(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5])
+                datetime = struct.unpack('I', first)[0]
+                tmp = struct.unpack('ddddq', f.read(40))
+
+                bar = Bar(datetime, tmp[0], tmp[1], tmp[2], tmp[3], tmp[4])
                 self.data.append(bar)
 
 
