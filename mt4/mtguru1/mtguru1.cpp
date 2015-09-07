@@ -18,6 +18,9 @@
 #define DEFAULT_PORT "1488"
 #define DEFAULT_ADDRESS "84.237.53.252"
 
+#define SEND_SIZE 48
+#define RECV_SIZE 16
+
 WSADATA wsaData;
 SOCKET ConnectSocket = INVALID_SOCKET;
 struct addrinfo *result = NULL,
@@ -25,19 +28,12 @@ struct addrinfo *result = NULL,
 	hints;
 size_t sendbuf_size;
 size_t recvbuf_size;
-char* sendbuf;
-char* recvbuf;
+char sendbuf[SEND_SIZE];
+char recvbuf[RECV_SIZE];
 int iResult;
 
-int global_size;
 
-
-MT4_EXPFUNC int __stdcall __connect(int size){
-	global_size = size;
-	sendbuf_size = sizeof(double) * 6;
-	recvbuf_size = sizeof(double) * 2;
-	recvbuf = (char*)malloc(recvbuf_size);
-	sendbuf = (char*)malloc(sendbuf_size);
+MT4_EXPFUNC int __stdcall __connect(){
 
 
 	// Initialize Winsock
@@ -89,15 +85,6 @@ MT4_EXPFUNC int __stdcall __connect(int size){
 		WSACleanup();
 		return 1;
 	}
-
-	iResult = send(ConnectSocket, (const char*)(&global_size), sizeof(int), 0);
-	if (iResult == SOCKET_ERROR) {
-		printf("send failed with error: %d\n", WSAGetLastError());
-		closesocket(ConnectSocket);
-		WSACleanup();
-		return 1;
-	}
-
 	
 	return 0;
 
@@ -117,9 +104,6 @@ MT4_EXPFUNC int __stdcall __disconnect() {
 	// cleanup
 	closesocket(ConnectSocket);
 	WSACleanup();
-
-	free(sendbuf);
-	free(recvbuf);
 
 	return 0;
 

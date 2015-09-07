@@ -34,7 +34,7 @@ def train(nn, data, N, predictionLength, iterations, validationSize):
         end = int(end)
         validation = int(validation)
         for i in range(start, end):
-            sample, mainValue, averageBar = data.contiguousArray(i, i + N)
+            sample, mainValue = data.contiguousArray(i, i + N)
             output1 = data.normalizedMin(i + N + 1, i + N + predictionLength + 1, mainValue)
             output2 = data.normalizedMax(i + N + 1, i + N + predictionLength + 1, mainValue)
             dataSet.addSample(sample, [output1, output2])
@@ -43,10 +43,10 @@ def train(nn, data, N, predictionLength, iterations, validationSize):
         trainer.train()
         dataSet.clear()
         for i in range(end, validation):
-            sample, mainValue, averageBar = data.contiguousArray(i, i + N)
+            sample, mainValue = data.contiguousArray(i, i + N)
             output1 = data.min(i + N + 1, i + N + predictionLength + 1)
             output2 = data.max(i + N + 1, i + N + predictionLength + 1)
-            low, high = nn.activate(sample) * averageBar + mainValue
+            low, high = nn.activate(sample) + mainValue
             dt = data.date(i + N + 1)
             currentHighLoss = high - output2
             currentLowLoss = low - output1

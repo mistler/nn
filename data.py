@@ -31,12 +31,12 @@ class Data:
         mainValue = (subArray[0].high + subArray[0].low) / 2.
         for i in range(end - start):
             tmp = subArray[i]
-            array.append((tmp.low - mainValue) / self.averageBarSize)
-            array.append((tmp.open - mainValue) / self.averageBarSize)
-            array.append((tmp.close - mainValue) / self.averageBarSize)
-            array.append((tmp.high - mainValue) / self.averageBarSize)
+            array.append((tmp.low - mainValue))
+            array.append((tmp.open - mainValue))
+            array.append((tmp.close - mainValue))
+            array.append((tmp.high - mainValue))
             array.append(tmp.volume / self.averageVolume)
-        return array, mainValue, self.averageBarSize
+        return array, mainValue
 
     def getAverageBarSize(self):
         return self.averageBarSize
@@ -49,14 +49,14 @@ class Data:
         for b in self.data[start: end]:
             if b.low < min:
                 min = b.low
-        return (min - average) / self.averageBarSize
+        return (min - average)
 
     def normalizedMax(self, start, end, average):
         max = 0.
         for b in self.data[start: end]:
             if b.high > max:
                 max = b.high
-        return (max - average) / self.averageBarSize
+        return (max - average)
 
     def min(self, start, end):
         min = 1000000.
