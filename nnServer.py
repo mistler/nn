@@ -21,7 +21,7 @@ def normalizeData(sample):
     result = []
     for i in range(len(sample)):
         if i != 0 and (i % 4) == 0:
-            result.append(s / averageVolume)
+            result.append(sample[i] / averageVolume)
         else:
             result.append((sample[i] - mainValue) / averageBarSize)
     return result, mainValue
