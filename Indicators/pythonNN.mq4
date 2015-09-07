@@ -24,19 +24,14 @@
 #property indicator_width2  1
 
 
-
-
 #import "mtguru1.dll"
 
-double __checkLibrary();
-void __loadNN(char& array[]);
-void __predict(double& data[], double& result[], const int inputSize);
+int __predict(double& data[], double& res[]);
+int __connect(int size);
+int __disconnect();
 
 #import
 
-
-
-extern string NN_LOADER_FILENAME = "dll.py";
 #define NN_INPUT_SIZE 5
 
 //--- indicator buffers
@@ -53,15 +48,7 @@ int OnInit()
    
    SetIndexStyle (0,DRAW_LINE,STYLE_SOLID,1);
    SetIndexStyle (1,DRAW_LINE,STYLE_SOLID,1);
-   
-   
-   char CHAR_FILENAME[];
-   ArrayResize(CHAR_FILENAME, StringLen(NN_LOADER_FILENAME) + 1);
-   StringToCharArray(NN_LOADER_FILENAME, CHAR_FILENAME);
-   CHAR_FILENAME[StringLen(NN_LOADER_FILENAME)] = '\0';
-   __loadNN(CHAR_FILENAME);
-   
-   
+   __connect(NN_INPUT_SIZE * 5);
 //---
    return(INIT_SUCCEEDED);
   }
@@ -95,7 +82,7 @@ int OnCalculate(const int rates_total,
          data[(k - i) * 5 + 3] = High[k];
          data[(k - i) * 5 + 4] = Volume[k];
       }
-      __predict(data, result, NN_INPUT_SIZE * 5);
+      Print(__predict(data, result));
       lowBuffer[i] = result[0];
       highBuffer[i] = result[1];
       i--;
