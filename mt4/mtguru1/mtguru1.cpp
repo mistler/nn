@@ -16,7 +16,7 @@
 
 #define MT4_EXPFUNC __declspec(dllexport)
 #define DEFAULT_PORT "1488"
-#define DEFAULT_ADDRESS "127.0.0.1"
+#define DEFAULT_ADDRESS "84.237.53.252"
 
 WSADATA wsaData;
 SOCKET ConnectSocket = INVALID_SOCKET;
