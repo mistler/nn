@@ -18,12 +18,13 @@ averageBarSize = data.getAverageBarSize();
 
 def normalizeData(sample):
     mainValue = (sample[3] + sample[0]) / 2.
+    result = []
     for i in range(len(sample)):
         if i != 0 and (i % 4) == 0:
-            sample[i] = sample[i] / averageVolume
+            result.append(s / averageVolume)
         else:
-            sample[i] = (sample[i] - mainValue) / averageBarSize
-    return sample, mainValue
+            result.append(sample[i] - mainValue) / averageBarSize
+    return result, mainValue
 
 
 def predict(list):
