@@ -3,6 +3,7 @@ import struct
 from nn import getNN
 from data import Data
 
+
 nnFilename = "-n5-dEURUSD.hst-l2.pkl"
 dataFilename = "EURUSD.hst"
 
@@ -13,6 +14,24 @@ data = Data(dataFilename)
 
 averageVolume = data.getAverageVolume()
 averageBarSize = data.getAverageBarSize();
+
+
+def normalizeData(sample):
+    mainValue = (sample[3] + sample[0]) / 2.
+    for i in range(len(sample)):
+        if i != 0 and (i % 4) == 0:
+            sample[i] = sample[i] / averageVolume
+        else:
+            sample[i] = (sample[i] - mainValue) / averageBarSize
+    return sample, mainValue
+
+
+def predict(list):
+    sample, mainValue = normalizeData(list)
+    low, high = nn.activate(sample) * averageBarSize + mainValue
+    return low, high
+
+
 
 print 'waiting for connection...'
 
@@ -39,19 +58,3 @@ while True:
     conn.send(toSend)
 
 conn.close()
-
-
-def normalizeData(sample):
-    mainValue = (sample[3] + sample[0]) / 2.
-    for i in range(len(sample)):
-        if i != 0 and (i % 4) == 0:
-            sample[i] = sample[i] / averageVolume
-        else:
-            sample[i] = (sample[i] - mainValue) / averageBarSize
-    return sample, mainValue
-
-
-def predict(list):
-    sample, mainValue = normalizeData(list)
-    low, high = nn.activate(sample) * averageBarSize + mainValue
-    return low, high
