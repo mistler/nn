@@ -30,6 +30,7 @@
     <SccProjectName />
     <SccLocalPath />
     <ProjectGuid>{14DF924B-4CEE-4A0E-8B92-7AF66493C036}</ProjectGuid>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

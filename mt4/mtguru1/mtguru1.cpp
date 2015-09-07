@@ -2,37 +2,151 @@
 //
 #define WIN32_LEAN_AND_MEAN  // Exclude rarely-used stuff from Windows headers
 #include "stdafx.h"
-#include <Python.h>
+#include <windows.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+
+// Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
+#pragma comment (lib, "Ws2_32.lib")
+#pragma comment (lib, "Mswsock.lib")
+#pragma comment (lib, "AdvApi32.lib")
 
 #define MT4_EXPFUNC __declspec(dllexport)
+#define DEFAULT_PORT "1488"
+#define DEFAULT_ADDRESS "127.0.0.1"
 
-MT4_EXPFUNC double __stdcall __checkLibrary(){
-	return 1.14;
+WSADATA wsaData;
+SOCKET ConnectSocket = INVALID_SOCKET;
+struct addrinfo *result = NULL,
+	*ptr = NULL,
+	hints;
+size_t sendbuf_size;
+size_t recvbuf_size;
+char* sendbuf;
+char* recvbuf;
+int iResult;
+
+int global_size;
+
+
+MT4_EXPFUNC int __stdcall __connect(int size){
+	global_size = size;
+	sendbuf_size = sizeof(double) * size;
+	recvbuf_size = sizeof(double) * 2;
+	recvbuf = (char*)malloc(recvbuf_size);
+	sendbuf = (char*)malloc(sendbuf_size);
+
+
+	// Initialize Winsock
+	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (iResult != 0) {
+		printf("WSAStartup failed with error: %d\n", iResult);
+		return 1;
+	}
+
+	ZeroMemory(&hints, sizeof(hints));
+	hints.ai_family = AF_UNSPEC;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_protocol = IPPROTO_TCP;
+
+	// Resolve the server address and port
+	iResult = getaddrinfo(DEFAULT_ADDRESS, DEFAULT_PORT, &hints, &result);
+	if (iResult != 0) {
+		printf("getaddrinfo failed with error: %d\n", iResult);
+		WSACleanup();
+		return 1;
+	}
+
+	// Attempt to connect to an address until one succeeds
+	for (ptr = result; ptr != NULL; ptr = ptr->ai_next) {
+
+		// Create a SOCKET for connecting to server
+		ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
+			ptr->ai_protocol);
+		if (ConnectSocket == INVALID_SOCKET) {
+			printf("socket failed with error: %ld\n", WSAGetLastError());
+			WSACleanup();
+			return 1;
+		}
+
+		// Connect to server.
+		iResult = connect(ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
+		if (iResult == SOCKET_ERROR) {
+			closesocket(ConnectSocket);
+			ConnectSocket = INVALID_SOCKET;
+			continue;
+		}
+		break;
+	}
+
+	freeaddrinfo(result);
+
+	if (ConnectSocket == INVALID_SOCKET) {
+		printf("Unable to connect to server!\n");
+		WSACleanup();
+		return 1;
+	}
+
+	iResult = send(ConnectSocket, (const char*)(&global_size), sizeof(int), 0);
+	if (iResult == SOCKET_ERROR) {
+		printf("send failed with error: %d\n", WSAGetLastError());
+		closesocket(ConnectSocket);
+		WSACleanup();
+		return 1;
+	}
+
+	
+	return 0;
+
 }
 
-MT4_EXPFUNC void __stdcall __predict(double* data, double* res, const int size){
-	Py_Initialize();
-	PyObject* main_module, *global_dict, *expression;
-	main_module = PyImport_AddModule("__main__");
-	global_dict = PyModule_GetDict(main_module);
-	expression = PyDict_GetItemString(global_dict, "predict");
+MT4_EXPFUNC int __stdcall __disconnect() {
 
-	PyObject *mylist = PyList_New(size);
-	for (size_t i = 0; i != size; ++i){
-		PyList_SET_ITEM(mylist, i, PyFloat_FromDouble(data[i]));
+	// shutdown the connection since no more data will be sent
+	iResult = shutdown(ConnectSocket, SD_SEND);
+	if (iResult == SOCKET_ERROR) {
+		printf("shutdown failed with error: %d\n", WSAGetLastError());
+		closesocket(ConnectSocket);
+		WSACleanup();
+		return 1;
 	}
-	PyObject *arglist = Py_BuildValue("(o)", mylist);
-	PyObject *result = PyObject_CallObject(expression, arglist);
-	for (size_t i = 0; i < PyList_Size(result); i++){
-		res[i] = PyFloat_AsDouble(PyList_GET_ITEM(result, i));
-	}
-	Py_Finalize();
+
+	// cleanup
+	closesocket(ConnectSocket);
+	WSACleanup();
+
+	free(sendbuf);
+	free(recvbuf);
+
+	return 0;
+
 }
 
-MT4_EXPFUNC void __stdcall __loadNN(char* filename){
-	FILE* exp_file = fopen(filename, "r");
-	Py_Initialize();
-	PyRun_SimpleFile(exp_file, NULL);
-	Py_Finalize();
-	fclose(exp_file);
+MT4_EXPFUNC int __stdcall __predict(double* data, double* res){
+
+	memcpy(sendbuf, data, sendbuf_size);
+
+	// Send an initial buffer
+	iResult = send(ConnectSocket, sendbuf, sendbuf_size, 0);
+	if (iResult == SOCKET_ERROR){
+		printf("send failed with error: %d\n", WSAGetLastError());
+		closesocket(ConnectSocket);
+		WSACleanup();
+		return 1;
+	}
+
+	// Receive until the peer closes the connection
+	iResult = recv(ConnectSocket, recvbuf, recvbuf_size, MSG_WAITALL);
+	if (iResult > 0) {
+		res[0] = ((double*)recvbuf)[0];
+		res[1] = ((double*)recvbuf)[1];
+		printf("Bytes received: %d\n", iResult);
+	}else if (iResult == 0)
+		printf("Connection closed\n");
+	else
+		printf("recv failed with error: %d\n", WSAGetLastError());
+	return 0;
 }
