@@ -30,6 +30,8 @@ def normalizeData(sample):
 def predict(list):
     sample, mainValue = normalizeData(list)
     low, high = nn.activate(sample) * averageBarSize + mainValue
+    low = sample[0] * averageBarSize + mainValue
+    high = sample[3] * averageBarSize + mainValue
     return low, high
 
 
