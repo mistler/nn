@@ -32,7 +32,7 @@ while True:
     if not dt:
         break
     b = struct.unpack('qddddq', dt)
-    data.append(b[0], b[1], b[2], b[3], b[4], b[5])
+    data.appendBar(b[0], b[1], b[2], b[3], b[4], b[5])
     sample, mainValue, averageBar = data.contiguousArray(len(data) - NN_INPUT_SIZE, len(data))
     low, high = nn.activate(sample) * averageBar + mainValue
     toSend = struct.pack('dd', low, high)
