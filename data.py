@@ -88,4 +88,11 @@ class Data:
                 bar = Bar(datetime, tmp[0], tmp[1], tmp[2], tmp[3], tmp[4])
                 self.data.append(bar)
 
+    def appendBar(self, datetime, lo, op, cl, hi, vl):
+        bar = Bar(datetime, lo, op, cl, hi, vl)
+        if self.data[len(data) - 1].datetime == datetime:
+            self.data.pop()
+        self.data.append(bar)
 
+    def remove(self):
+        self.data.pop()

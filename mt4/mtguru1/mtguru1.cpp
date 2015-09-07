@@ -34,7 +34,7 @@ int global_size;
 
 MT4_EXPFUNC int __stdcall __connect(int size){
 	global_size = size;
-	sendbuf_size = sizeof(double) * size;
+	sendbuf_size = sizeof(double) * 6;
 	recvbuf_size = sizeof(double) * 2;
 	recvbuf = (char*)malloc(recvbuf_size);
 	sendbuf = (char*)malloc(sendbuf_size);
@@ -125,9 +125,11 @@ MT4_EXPFUNC int __stdcall __disconnect() {
 
 }
 
-MT4_EXPFUNC int __stdcall __predict(double* data, double* res){
+MT4_EXPFUNC int __stdcall __predict(long long int* dv, double* data, double* res){
 
-	memcpy(sendbuf, data, sendbuf_size);
+	memcpy(sendbuf + 8, data, sizeof(double) * 4);
+	((long long int*)sendbuf)[0] = dv[0];
+	((long long int*)sendbuf)[5] = dv[1];
 
 	// Send an initial buffer
 	iResult = send(ConnectSocket, sendbuf, sendbuf_size, 0);
