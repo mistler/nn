@@ -44,13 +44,14 @@ def train(nn, data, N, predictionLength, iterations, validationSize):
         for i in range(end, validation):
             sample, mainValue = data.contiguousArray(i, i + N)
             realOutput = data.max(i + N + 1, i + N + predictionLength + 1)
-            nnOutput = nn.activate(sample) + mainValue
+            nnOutputValue = nn.activate(sample) + mainValue
             dt = data.date(i + N + 1)
-            currentLoss = nnOutput - realOutput
+            currentLoss = nnOutputValue - realOutput
             loss += currentLoss * currentLoss
             print '============================'
             print dt
-            print "NN: ", "{0:.10f}".format(nnOutput), " Real: ", "{0:.10f}".format(realOutput)
+            print "NN: ", "{0:.10f}".format(nnOutputValue)
+            print "Real: ", "{0:.10f}".format(realOutput)
             print "LOSS: ", "{0:.10f}".format(currentLoss)
             print "LOSS TOTAL: ", "{0:.10f}".format(loss / lossSize)
             print '============================'
