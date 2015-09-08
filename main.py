@@ -20,7 +20,7 @@ print 'Building network...'
 if options.resume:
     nn = getNN(True, options.netFileName)
 else:
-    layersString = str(int(options.N) * 5) + '.' + options.layers + '.2'
+    layersString = str(int(options.N) * 5) + '.' + options.layers + '.1'
     layers = layersString.split('.')
     layers = [int(s) for s in layers]
     nn = getNN(False, layers)

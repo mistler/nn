@@ -19,7 +19,6 @@
 #define DEFAULT_ADDRESS "84.237.53.252"
 
 #define SEND_SIZE 48
-#define RECV_SIZE 16
 
 WSADATA wsaData;
 SOCKET ConnectSocket = INVALID_SOCKET;
@@ -29,7 +28,6 @@ struct addrinfo *result = NULL,
 size_t sendbuf_size;
 size_t recvbuf_size;
 char sendbuf[SEND_SIZE];
-char recvbuf[RECV_SIZE];
 int iResult;
 
 
@@ -125,10 +123,8 @@ MT4_EXPFUNC int __stdcall __predict(long long int* dv, double* data, double* res
 	}
 
 	// Receive until the peer closes the connection
-	iResult = recv(ConnectSocket, recvbuf, recvbuf_size, MSG_WAITALL);
+	iResult = recv(ConnectSocket, (char*) res, sizeof(double), MSG_WAITALL);
 	if (iResult > 0) {
-		res[0] = ((double*)recvbuf)[0];
-		res[1] = ((double*)recvbuf)[1];
 		printf("Bytes received: %d\n", iResult);
 	}else if (iResult == 0)
 		printf("Connection closed\n");

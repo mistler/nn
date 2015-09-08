@@ -26,13 +26,12 @@
 
 #import "mtguru1.dll"
 
-int __predict(double& data[], double& res[]);
-int __connect(int size);
+int __predict(long& dv[], double& data[], double& res[]);
+int __connect();
 int __disconnect();
 
 #import
 
-#define NN_INPUT_SIZE 5
 
 //--- indicator buffers
 double         lowBuffer[];
@@ -48,7 +47,7 @@ int OnInit()
    
    SetIndexStyle (0,DRAW_LINE,STYLE_SOLID,1);
    SetIndexStyle (1,DRAW_LINE,STYLE_SOLID,1);
-   __connect(NN_INPUT_SIZE * 5);
+   __connect();
 //---
    return(INIT_SUCCEEDED);
   }
@@ -69,22 +68,21 @@ int OnCalculate(const int rates_total,
    int Counted_bars;
    Counted_bars=IndicatorCounted();
    i=Bars-Counted_bars-1;
-   if(i > Bars - NN_INPUT_SIZE - 1){
-      i = Bars - NN_INPUT_SIZE - 1;
+   if(i > 1000){
+      i = 1000;
    }
-   double result[2];
-   double data[NN_INPUT_SIZE * 5];
+   double result[1];
+   double data[4];
+   long dv[2];
    while(i >= 0){
-      for(int k = i; k < i + NN_INPUT_SIZE; k++){
-         data[(k - i) * 5 + 0] = Low[k];
-         data[(k - i) * 5 + 1] = Open[k];
-         data[(k - i) * 5 + 2] = Close[k];
-         data[(k - i) * 5 + 3] = High[k];
-         data[(k - i) * 5 + 4] = Volume[k];
-      }
-      Print(__predict(data, result));
-      lowBuffer[i] = result[0];
-      highBuffer[i] = result[1];
+      dv[0] = Time[i];
+      dv[1] = Volume[i];
+      data[0] = Low[i];
+      data[1] = Open[i];
+      data[2] = Close[i];
+      data[3] = High[i];
+      __predict(dv, data, result);
+      highBuffer[i] = result[0];
       i--;
    }
    return(rates_total);
