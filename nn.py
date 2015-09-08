@@ -5,6 +5,8 @@ except ImportError:
 
 from data import Data
 
+from math import sqrt
+
 from pybrain.tools.shortcuts import buildNetwork
 from pybrain.datasets import SupervisedDataSet
 from pybrain.supervised.trainers import BackpropTrainer
@@ -52,6 +54,11 @@ def train(nn, data, N, predictionLength, iterations, validationSize):
             print dt
             print "NN: ", "{0:.10f}".format(nnOutputValue), " Real: ", "{0:.10f}".format(realOutput)
             print "LOSS: ", "{0:.10f}".format(currentLoss)
-            print "LOSS TOTAL: ", "{0:.10f}".format(loss / lossSize)
+            print "LOSS TOTAL: ", "{0:.10f}".format(sqrt(loss / lossSize))
             print '============================'
             lossSize += 1.
+
+def activateNN(nn, data, start, end):
+    sample, mainValue = data.contiguousArray(start, end)
+    nnOutputValue = nn.activate(sample)[0] + mainValue
+    return nnOutputValue

@@ -1,6 +1,6 @@
 import socket
 import struct
-from nn import getNN
+from nn import getNN, activateNN
 from data import Data
 
 
@@ -32,8 +32,7 @@ while True:
         break
     b = struct.unpack('qddddq', dt)
     data.appendBar(b[0], b[1], b[2], b[3], b[4], b[5])
-    sample, mainValue = data.contiguousArray(len(data) - NN_INPUT_SIZE, len(data))
-    result = nn.activate(sample) + mainValue
+    result = activateNN(nn, data, len(data) - NN_INPUT_SIZE, len(data))
     print 'add: ', b[0], ' result: ', result
     toSend = struct.pack('d', result)
     conn.send(toSend)
