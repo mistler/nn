@@ -1,13 +1,12 @@
 import socket
 import struct
+import sys
 from nn import getNN, activateNN
 from data import Data
 
-
-nnFilename = "-n5-dEURUSD.hst-l2.pkl"
-dataFilename = "EURUSD.hst"
-
-NN_INPUT_SIZE = 5
+NN_INPUT_SIZE = int(sys.argv[1])
+nnFilename = sys.argv[2]
+dataFilename = sys.argv[3]
 
 print 'loading data and nn...'
 
