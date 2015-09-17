@@ -61,7 +61,7 @@ def train(nn, data, N, predictionLength, iterations, validationSize):
 def trainUntilConvergence(nn, data, N, predictionLength):
     dataSet = SupervisedDataSet(5 * N, 1)
     start = 0
-    end = 1 - N - predictionLength
+    end = len(data) + 1 - N - predictionLength
     for i in range(start, end):
         sample, mainValue = data.contiguousArray(i, i + N)
         output = data.normalizedMax(i + N + 1, i + N + predictionLength + 1, mainValue)
