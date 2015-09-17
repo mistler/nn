@@ -19,15 +19,16 @@
 #define DEFAULT_ADDRESS "84.237.53.252"
 
 #define SEND_SIZE 48
+#define RECV_SIZE 8
+
 
 WSADATA wsaData;
 SOCKET ConnectSocket = INVALID_SOCKET;
 struct addrinfo *result = NULL,
 	*ptr = NULL,
 	hints;
-size_t sendbuf_size;
-size_t recvbuf_size;
 char sendbuf[SEND_SIZE];
+char recvbuf[RECV_SIZE];
 int iResult;
 
 
@@ -114,7 +115,7 @@ MT4_EXPFUNC int __stdcall __predict(long long int* dv, double* data, double* res
 	((long long int*)sendbuf)[5] = dv[1];
 
 	// Send an initial buffer
-	iResult = send(ConnectSocket, sendbuf, sendbuf_size, 0);
+	iResult = send(ConnectSocket, sendbuf, SEND_SIZE, 0);
 	if (iResult == SOCKET_ERROR){
 		printf("send failed with error: %d\n", WSAGetLastError());
 		closesocket(ConnectSocket);
@@ -123,8 +124,9 @@ MT4_EXPFUNC int __stdcall __predict(long long int* dv, double* data, double* res
 	}
 
 	// Receive until the peer closes the connection
-	iResult = recv(ConnectSocket, (char*) res, sizeof(double), MSG_WAITALL);
+	iResult = recv(ConnectSocket, recvbuf, RECV_SIZE, MSG_WAITALL);
 	if (iResult > 0) {
+		*res = *((double*)recvbuf);
 		printf("Bytes received: %d\n", iResult);
 	}else if (iResult == 0)
 		printf("Connection closed\n");

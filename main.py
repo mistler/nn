@@ -2,7 +2,7 @@ import sys
 from optparse import OptionParser
 
 from data import Data
-from nn import getNN, saveNN, train
+from nn import getNN, saveNN, train, trainUntilConvergence
 
 parser = OptionParser()
 parser.add_option('-r', '--resume', dest='resume', action='store_true', default=False)
@@ -13,6 +13,7 @@ parser.add_option('-i', '--iterations', dest='iterations', default=200)
 parser.add_option('-v', '--validation', dest='validation', default=1)
 parser.add_option('-l', '--layers', dest='layers')
 parser.add_option('-p', '--prediction', dest='prediction', default=3)
+parser.add_option('-c', '--convergence', dest='convergence', action='store_true', default=False)
 
 (options, args) = parser.parse_args()
 
@@ -30,8 +31,12 @@ print 'Loading data...'
 data = Data(options.dataFileName)
 print 'Data size: ', len(data)
 
-print 'Training...'
-train(nn, data, int(options.N), int(options.prediction), int(options.iterations), int(options.validation))
+if options.convergence:
+    print 'Training until convergence...'
+    trainUntilConvergence(nn, data, int(options.N), int(options.prediction))
+else:
+    print 'Training...'
+    train(nn, data, int(options.N), int(options.prediction), int(options.iterations), int(options.validation))
 
 print "saving nn..."
 name = ''

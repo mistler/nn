@@ -58,6 +58,18 @@ def train(nn, data, N, predictionLength, iterations, validationSize):
             print '============================'
             lossSize += 1.
 
+def trainUntilConvergence(nn, data, N, predictionLength):
+    dataSet = SupervisedDataSet(5 * N, 1)
+    start = 0
+    end = 1 - N - predictionLength
+    for i in range(start, end):
+        sample, mainValue = data.contiguousArray(i, i + N)
+        output = data.normalizedMax(i + N + 1, i + N + predictionLength + 1, mainValue)
+        dataSet.addSample(sample, (output,))
+    trainer = BackpropTrainer(nn, dataSet)
+    trainer.trainUntilConvergence()
+    dataSet.clear()
+
 def activateNN(nn, data, start, end):
     sample, mainValue = data.contiguousArray(start, end)
     nnOutputValue = nn.activate(sample)[0] + mainValue
