@@ -25,7 +25,7 @@ class NeuralNetwork:
         self.data = data
         self.nn = nn
         self.trainer = trainer
-        self.ds = NeuralNetwork.TrainingDataset(self.data, self.N, self.predictionLength)
+        self.ds = NeuralNetwork.TrainingDataset(self.data, self.N / 5, self.predictionLength)
         self.trainer.setup(self.nn, self.ds)
 
 

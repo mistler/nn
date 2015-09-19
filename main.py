@@ -1,4 +1,5 @@
 import sys
+import importlib
 from optparse import OptionParser
 try:
     import cPickle as pickle
@@ -28,8 +29,8 @@ else:
     print 'Loading data...'
     data = Data(options.dataFileName)
     print 'Data size: ', len(data)
-    import importlib
-    networkClass = importlib.import_module('Network', package='networks.' + options.network)
+    networkModule = importlib.import_module('networks.' + options.network[:1].lower() + options.network[1:])
+    networkClass = getattr(networkModule, options.network)
     nn = networkClass(data)
 
 print 'Training...'

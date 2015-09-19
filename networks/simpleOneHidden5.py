@@ -7,7 +7,7 @@ from nnPylearn2 import NeuralNetwork
 
 class SimpleOneHidden5(NeuralNetwork):
     def __init__(self, data):
-        self.N = 5
+        self.N = 5 * 5
         self.predictionLength = 2
         # create hidden layer with 2 nodes, init weights in range -0.1 to 0.1 and add
         # a bias with value 1
@@ -19,4 +19,4 @@ class SimpleOneHidden5(NeuralNetwork):
         layers = [hidden_layer, output_layer]
         # create neural net that takes two inputs
         nn = mlp.MLP(layers, nvis=self.N)
-        super(self.__class__, self).__init__(data, nn, trainer)
+        NeuralNetwork.__init__(self, data, nn, trainer)
