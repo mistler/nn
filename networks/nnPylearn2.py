@@ -25,13 +25,12 @@ class NeuralNetwork:
         self.data = data
         self.nn = nn
         self.trainer = trainer
-        self.ds = NeuralNetwork.TrainingDataset(self.data, self.N / 5, self.predictionLength)
-        self.trainer.setup(self.nn, self.ds)
-
 
     def train(self):
+        ds = NeuralNetwork.TrainingDataset(self.data, self.N / 5, self.predictionLength)
+        self.trainer.setup(self.nn, ds)
         while True:
-            self.trainer.train(dataset=self.ds)
+            self.trainer.train(dataset=ds)
             self.nn.monitor.report_epoch()
             self.nn.monitor()
             if not self.trainer.continue_learning(self.nn):
