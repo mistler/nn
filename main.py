@@ -13,11 +13,16 @@ parser = OptionParser()
 parser.add_option('-r', '--resume', dest='resume', action='store_true', default=False)
 parser.add_option('-d', '--data', dest='dataFileName')
 parser.add_option('-i', '--iterations', dest='iterations', default=200)
-parser.add_option('-v', '--validation', dest='validation', default=1)
+parser.add_option('-v', '--validation', dest='validation', action='store_true', default=False)
 parser.add_option('-n', '--network', dest='network')
 parser.add_option('-p', '--prediction', dest='prediction', default=3)
 
 (options, args) = parser.parse_args()
+
+
+if options.validation:
+    with open(options.network, 'rb') as f:
+        nn = pickle.load(f)
 
 
 print 'Building network...'
