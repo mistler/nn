@@ -47,7 +47,7 @@ class NeuralNetwork:
 
     def validate(self):
         size = len(self.data)
-        stride = size / 25.
+        stride = size / 25
         loss = 0.
         lossSize = 1.
         for i in range(0, size, stride):
