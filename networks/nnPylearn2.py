@@ -4,8 +4,6 @@ from pylearn2.datasets.dense_design_matrix import DenseDesignMatrix
 
 from math import sqrt
 
-from data import Data
-
 class NeuralNetwork:
     class TrainingDataset(DenseDesignMatrix):
         def __init__(self, data, N, predictionLength):

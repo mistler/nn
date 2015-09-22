@@ -1,4 +1,3 @@
-import sys
 import importlib
 from optparse import OptionParser
 try:

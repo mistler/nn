@@ -1,37 +1,34 @@
 import socket
 import struct
 import sys
-from nn import getNN, activateNN
-from data import Data
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
-NN_INPUT_SIZE = int(sys.argv[1])
-nnFilename = sys.argv[2]
-dataFilename = sys.argv[3]
+nnFilename = sys.argv[1]
 
-print 'loading data and nn...'
+print 'Loading nn...'
 
-nn = getNN(True, nnFilename)
-data = Data(dataFilename)
+with open(nnFilename, 'rb') as f:
+    nn = pickle.load(f)
 
-averageVolume = data.getAverageVolume()
-averageBarSize = data.getAverageBarSize();
-
-print 'waiting for connection...'
+print 'Waiting for connection...'
 
 sock = socket.socket()
 sock.bind(('', 1488))
 sock.listen(1)
 conn, addr = sock.accept()
 
-print 'connected: ', addr
+print 'Connected: ', addr
 
 while True:
     dt = conn.recv(48)
     if not dt:
         break
     b = struct.unpack('qddddq', dt)
-    data.appendBar(b[0], b[1], b[2], b[3], b[4], b[5])
-    result = activateNN(nn, data, len(data) - NN_INPUT_SIZE, len(data))
+    nn.data.appendBar(b[0], b[1], b[2], b[3], b[4], b[5])
+    result = nn.predict(len(nn.data) - nn.dataLength, len(nn.data))
     print 'add: ', b[0], ' result: ', result
     toSend = struct.pack('d', result)
     conn.send(toSend)
