@@ -40,11 +40,11 @@ class NeuralNetwork:
     def predict(self, start, end):
         sample, mainValue = self.data.contiguousArray(start, end)
         inputs = np.array([sample, ])
-        nnOutputValue = self.nn.fprop(theano.shared(inputs, name='inputs')).eval() + mainValue
+        nnOutputValue = self.nn.fprop(theano.shared(inputs, name='inputs')).eval()[0][0] + mainValue
         return nnOutputValue
 
     def validate(self):
-        size = len(self.data)
+        size = len(self.data) - self.N - self.predictionLength - 1
         stride = size / 25
         loss = 0.
         lossSize = 1.
@@ -52,7 +52,7 @@ class NeuralNetwork:
             sample, mainValue = self.data.contiguousArray(i, i + self.dataLength)
             realOutput = self.data.max(i + self.dataLength + 1, i + self.dataLength + self.predictionLength + 1)
             inputs = np.array([sample, ])
-            nnOutputValue = self.nn.fprop(theano.shared(inputs, name='inputs')).eval() + mainValue
+            nnOutputValue = self.nn.fprop(theano.shared(inputs, name='inputs')).eval()[0][0] + mainValue
             dt = self.data.date(i + self.dataLength + 1)
             currentLoss = nnOutputValue - realOutput
             loss += currentLoss * currentLoss

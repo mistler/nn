@@ -12,8 +12,8 @@ class SimpleOneHidden5(NeuralNetwork):
         # create hidden layer with 2 nodes, init weights in range -0.1 to 0.1 and add
         # a bias with value 1
         hidden_layer = mlp.Sigmoid(layer_name='hidden', dim=25, irange=.1, init_bias=1.)
-        # create Softmax output layer
-        output_layer = mlp.Softmax(1, 'output', irange=.1)
+        # create Linear output layer
+        output_layer = mlp.Linear(1, 'output', irange=.1, init_bias=1.);
         # create Stochastic Gradient Descent trainer that runs for 400 epochs
         trainer = sgd.SGD(learning_rate=.05, batch_size=10, termination_criterion=EpochCounter(10))
         layers = [hidden_layer, output_layer]

@@ -25,3 +25,6 @@ class Bar:
 
     def volumeMultiply(self, value):
         self.volume *= value
+
+    def white(self):
+        return self.close > self.open
