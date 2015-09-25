@@ -15,7 +15,7 @@ class SimpleOneHidden5(NeuralNetwork):
         # create Linear output layer
         output_layer = mlp.Linear(1, 'output', irange=.1, init_bias=1.);
         # create Stochastic Gradient Descent trainer that runs for 400 epochs
-        trainer = sgd.SGD(learning_rate=.05, batch_size=10, termination_criterion=EpochCounter(10))
+        trainer = sgd.SGD(learning_rate=.05, batch_size=10, termination_criterion=EpochCounter(100))
         layers = [hidden_layer, output_layer]
         # create neural net that takes two inputs
         nn = mlp.MLP(layers, nvis=self.N)
